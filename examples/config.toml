@@ -1,0 +1,32 @@
+# 应用配置示例
+name = "my-app"
+version = "1.0.0"
+debug = true
+
+# 数据库配置
+[database]
+host = "localhost"
+port = 5432
+name = "mydb"
+
+[database.pool]
+max = 10
+min = 2
+
+# 服务器配置
+[server]
+host = "0.0.0.0"
+port = 8080
+workers = 4
+
+# 日志配置
+[logging]
+level = "info"
+format = "json"
+
+[[logging.outputs]]
+type = "stdout"
+
+[[logging.outputs]]
+type = "file"
+path = "/var/log/app.log"

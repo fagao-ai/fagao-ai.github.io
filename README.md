@@ -1,0 +1,261 @@
+# Config to ENV (cte)
+
+一个灵活的配置文件转环境变量语句的运维工具，支持多种配置格式，具有良好的可扩展性。
+
+## 特性
+
+- ✅ 支持多种配置格式：YAML、TOML
+- ✅ 基于 Trait 的可扩展架构，轻松添加新的配置格式
+- ✅ 支持环境变量前缀
+- ✅ 自定义分隔符（默认 `_`）
+- ✅ 可选择是否转为大写（默认转为大写）
+- ✅ 递归处理嵌套配置
+- ✅ 支持数组索引
+
+## 安装
+
+```bash
+cargo build --release
+```
+
+编译后的二进制文件位于 `target/release/cte`
+
+## 使用方法
+
+### 基本用法
+
+```bash
+# 转换 YAML 配置文件
+cte -i config.yaml
+
+# 转换 TOML 配置文件
+cte -i config.toml
+
+# 添加前缀
+cte -i config.yaml --prefix APP
+
+# 使用自定义分隔符
+cte -i config.yaml --separator "__"
+
+# 保持小写（默认转为大写）
+cte -i config.yaml --no-uppercase
+
+# 输出到文件
+cte -i config.yaml -o .env
+
+# 完整示例
+cte -i config.yaml --prefix APP --separator "__" -o .env
+```
+
+### 命令行选项
+
+- `-i, --input <INPUT>`: 配置文件路径（必需）
+- `-o, --output <OUTPUT>`: 输出文件路径（可选，默认输出到 stdout）
+- `-f, --format <FORMAT>`: 配置文件类型（可选，自动根据扩展名检测）
+- `-p, --prefix <PREFIX>`: 环境变量前缀
+- `-s, --separator <SEPARATOR>`: 分隔符，用于替换嵌套键中的点号（默认 `_`）
+- `--no-uppercase`: 保持键的小写（默认转为大写）
+- `-h, --help`: 显示帮助信息
+- `-V, --version`: 显示版本信息
+
+## 示例
+
+### YAML 示例
+
+**输入 (config.yaml):**
+```yaml
+database:
+  host: "localhost"
+  port: 5432
+  credentials:
+    username: "admin"
+    password: "secret"
+```
+
+**命令:**
+```bash
+cte -i config.yaml --prefix DB
+```
+
+**输出:**
+```bash
+DB_DATABASE_HOST=localhost
+DB_DATABASE_PORT=5432
+DB_DATABASE_CREDENTIALS_USERNAME=admin
+DB_DATABASE_CREDENTIALS_PASSWORD=secret
+```
+
+### TOML 示例
+
+**输入 (config.toml):**
+```toml
+[server]
+host = "0.0.0.0"
+port = 8080
+
+[server.database]
+name = "mydb"
+pool_size = 10
+```
+
+**命令:**
+```bash
+cte -i config.toml --prefix APP --separator "__"
+```
+
+**输出:**
+```bash
+APP__SERVER__HOST=0.0.0.0
+APP__SERVER__PORT=8080
+APP__SERVER__DATABASE__NAME=mydb
+APP__SERVER__DATABASE__POOL_SIZE=10
+```
+
+### 数组支持
+
+**输入:**
+```yaml
+servers:
+  - host: "server1.example.com"
+    port: 8001
+  - host: "server2.example.com"
+    port: 8002
+```
+
+**输出:**
+```bash
+SERVERS_0_HOST=server1.example.com
+SERVERS_0_PORT=8001
+SERVERS_1_HOST=server2.example.com
+SERVERS_1_PORT=8002
+```
+
+## 扩展性
+
+### 添加新的配置格式
+
+该工具使用 Trait 体系实现良好的扩展性。要添加新的配置格式，只需：
+
+1. 实现 `ConfigParser` trait
+2. 在 `main.rs` 中注册新的解析器
+
+**示例：添加 JSON 支持**
+
+```rust
+// 在 src/json_parser.rs 中
+use crate::parser::ConfigParser;
+use anyhow::{Context, Result};
+use std::collections::HashMap;
+use serde_json::Value;
+
+pub struct JsonParser;
+
+impl JsonParser {
+    pub fn new() -> Self {
+        Self
+    }
+}
+
+impl Default for JsonParser {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl ConfigParser for JsonParser {
+    fn parse(&self, content: &str) -> Result<HashMap<String, String>> {
+        let json_value: Value =
+            serde_json::from_str(content).context("Failed to parse JSON content")?;
+
+        let mut result = HashMap::new();
+        self.flatten_value("", &json_value, &mut result);
+
+        Ok(result)
+    }
+
+    fn name(&self) -> &str {
+        "json"
+    }
+}
+
+impl JsonParser {
+    fn flatten_value(&self, prefix: &str, value: &Value, result: &mut HashMap<String, String>) {
+        // 实现类似于 YAML/TOML 解析器的扁平化逻辑
+        // ...
+    }
+}
+```
+
+然后在 `main.rs` 中添加：
+
+```rust
+mod json_parser;  // 添加模块声明
+
+use json_parser::JsonParser;  // 导入
+
+// 在 main 函数中注册
+let parser: Box<dyn ConfigParser> = match format.as_str() {
+    "yaml" | "yml" => Box::new(YamlParser::new()),
+    "toml" => Box::new(TomlParser::new()),
+    "json" => Box::new(JsonParser::new()),  // 添加 JSON 支持
+    _ => bail!("Unsupported format: {}", format),
+};
+```
+
+### 核心 Trait
+
+```rust
+pub trait ConfigParser: Send + Sync {
+    /// 解析配置字符串，返回通用的键值对映射
+    fn parse(&self, content: &str) -> Result<HashMap<String, String>>;
+
+    /// 返回解析器的名称
+    fn name(&self) -> &str;
+}
+```
+
+## 项目结构
+
+```
+cte/
+├── src/
+│   ├── main.rs          # CLI 入口和主程序逻辑
+│   ├── parser.rs        # 核心 Trait 和 ENV 生成器
+│   ├── yaml_parser.rs   # YAML 解析器实现
+│   └── toml_parser.rs   # TOML 解析器实现
+├── examples/
+│   ├── config.yaml      # YAML 示例配置
+│   └── config.toml      # TOML 示例配置
+├── Cargo.toml
+└── README.md
+```
+
+## 测试
+
+运行测试：
+
+```bash
+cargo test
+```
+
+运行示例：
+
+```bash
+# YAML 示例
+./target/debug/cte -i examples/config.yaml --prefix APP
+
+# TOML 示例
+./target/debug/cte -i examples/config.toml --prefix APP
+```
+
+## 依赖
+
+- `serde`: 序列化/反序列化框架
+- `serde_yaml`: YAML 支持
+- `toml`: TOML 支持
+- `clap`: 命令行参数解析
+- `anyhow`: 错误处理
+
+## License
+
+MIT
