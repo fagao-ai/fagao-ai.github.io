@@ -1,0 +1,8 @@
+# 如果你要使用自定义域名，请将此文件重命名为 CNAME
+# 然后将你的域名写入其中（不要包含 https://）
+
+# 例如：
+# custom-domain.com
+# www.custom-domain.com
+
+# 使用 fagao-ai.github.io 默认域名则不需要此文件

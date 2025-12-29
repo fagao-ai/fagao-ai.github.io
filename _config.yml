@@ -1,0 +1,21 @@
+theme: jekyll-theme-minimal
+title: Fagao AI
+description: 开发实用的开源命令行工具和AI应用
+url: "https://fagao-ai.github.io"
+baseurl: ""
+
+# GitHub Pages 配置
+lsi: false
+safe: true
+source: .
+incremental: false
+
+markdown: kramdown
+highlighter: rouge
+
+# 排除的文件
+exclude:
+  - CNAME.template
+  - LICENSE
+  - README.md
+  - apt/README.md
