@@ -1,0 +1,151 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Release Artifacts
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            artifact_name: cte
+            asset_name: cte-linux-amd64
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            artifact_name: cte
+            asset_name: cte-linux-arm64
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            artifact_name: cte
+            asset_name: cte-darwin-amd64
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            artifact_name: cte
+            asset_name: cte-darwin-arm64
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Build binary
+        run: |
+          cargo build --release --target ${{ matrix.target }}
+
+      - name: Strip binary (linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: strip target/${{ matrix.target }}/release/${{ matrix.artifact_name }}
+
+      - name: Prepare binary
+        run: |
+          cd target/${{ matrix.target }}/release
+          chmod +x ${{ matrix.artifact_name }}
+          tar czf ${{ matrix.asset_name }}.tar.gz ${{ matrix.artifact_name }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset_name }}
+          path: target/${{ matrix.target }}/release/${{ matrix.asset_name }}.tar.gz
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Display structure of downloaded files
+        run: ls -R artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            artifacts/*/*.tar.gz
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  homebrew:
+    name: Update Homebrew Tap
+    needs: release
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Checkout Homebrew Tap
+        uses: actions/checkout@v4
+        with:
+          repository: hezhaozhao/homebrew-tap
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          path: homebrew-tap
+
+      - name: Update Formula
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "Updating Homebrew formula to version $VERSION"
+
+          # 下载 Linux 二进制文件获取 SHA256
+          wget https://github.com/hezhaozhao/cte/releases/download/${VERSION}/cte-linux-amd64.tar.gz
+          SHA256=$(shasum -a 256 cte-linux-amd64.tar.gz | awk '{print $1}')
+
+          # 更新 Formula
+          cat > homebrew-tap/Formula/cte.rb << 'EOF'
+          class Cte < Formula
+            desc "Config to ENV converter - Convert YAML/TOML/JSON configs to environment variables"
+            homepage "https://github.com/hezhaozhao/cte"
+            url "https://github.com/hezhaozhao/cte/archive/refs/tags/${VERSION}.tar.gz"
+            sha256 "${SHA256}"
+            license "MIT"
+
+            depends_on "rust" => :build
+
+            def install
+              system "cargo", "install", *std_cargo_args
+            end
+
+            test do
+              (testpath/"config.yaml").write <<~EOS
+                app:
+                  name: "test"
+                  port: 8080
+              EOS
+
+              output = shell_output("\#{bin}/cte -i config.yaml --prefix TEST_")
+              assert_match "TEST_APP_NAME=test", output
+              assert_match "TEST_APP_PORT=8080", output
+            end
+          end
+          EOF
+
+      - name: Commit and Push
+        working-directory: homebrew-tap
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/cte.rb
+          git commit -m "Update cte to ${VERSION}"
+          git push

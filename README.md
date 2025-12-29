@@ -4,7 +4,7 @@
 
 ## 特性
 
-- ✅ 支持多种配置格式：YAML、TOML
+- ✅ 支持多种配置格式：YAML、TOML、JSON
 - ✅ 基于 Trait 的可扩展架构，轻松添加新的配置格式
 - ✅ 支持环境变量前缀
 - ✅ 自定义分隔符（默认 `_`）
@@ -14,11 +14,48 @@
 
 ## 安装
 
+### macOS/Linux (推荐)
+
+**使用 Homebrew:**
 ```bash
-cargo build --release
+brew tap hezhaozhao/tap
+brew install cte
 ```
 
-编译后的二进制文件位于 `target/release/cte`
+**使用 APT (Debian/Ubuntu):**
+```bash
+# 添加仓库
+wget -qO- https://hezhaozhao.github.io/cte/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/cte.gpg
+echo "deb [arch=$(dpkg --print-architecture)] https://hezhaozhao.github.io/cte/apt stable main" | sudo tee /etc/apt/sources.list.d/cte.list
+
+# 安装
+sudo apt update
+sudo apt install cte
+```
+
+**使用安装脚本:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/hezhaozhao/cte/main/scripts/install.sh | sudo sh
+```
+
+### 从源码构建
+
+```bash
+# 安装 Rust (如果还没安装)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# 克隆并构建
+git clone https://github.com/hezhaozhao/cte.git
+cd cte
+cargo build --release
+sudo cp target/release/cte /usr/local/bin/
+```
+
+### 预编译二进制
+
+从 [GitHub Releases](https://github.com/hezhaozhao/cte/releases) 下载适合你系统的二进制文件。
+
+更多安装方式请查看 [完整安装指南](INSTALL.md)。
 
 ## 使用方法
 
