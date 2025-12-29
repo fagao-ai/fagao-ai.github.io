@@ -31,8 +31,8 @@ cte -i config.yaml
 # 转换 TOML 配置文件
 cte -i config.toml
 
-# 添加前缀
-cte -i config.yaml --prefix APP
+# 添加前缀（注意：前缀不会自动添加分隔符，请在前缀中包含）
+cte -i config.yaml --prefix APP_
 
 # 使用自定义分隔符
 cte -i config.yaml --separator "__"
@@ -44,7 +44,7 @@ cte -i config.yaml --no-uppercase
 cte -i config.yaml -o .env
 
 # 完整示例
-cte -i config.yaml --prefix APP --separator "__" -o .env
+cte -i config.yaml --prefix APP_ --separator "__" -o .env
 ```
 
 ### 命令行选项
@@ -74,7 +74,7 @@ database:
 
 **命令:**
 ```bash
-cte -i config.yaml --prefix DB
+cte -i config.yaml --prefix DB_
 ```
 
 **输出:**
@@ -100,15 +100,15 @@ pool_size = 10
 
 **命令:**
 ```bash
-cte -i config.toml --prefix APP --separator "__"
+cte -i config.toml --prefix APP_ --separator "__"
 ```
 
 **输出:**
 ```bash
-APP__SERVER__HOST=0.0.0.0
-APP__SERVER__PORT=8080
-APP__SERVER__DATABASE__NAME=mydb
-APP__SERVER__DATABASE__POOL_SIZE=10
+APP_SERVER__HOST=0.0.0.0
+APP_SERVER__PORT=8080
+APP_SERVER__DATABASE__NAME=mydb
+APP_SERVER__DATABASE__POOL_SIZE=10
 ```
 
 ### 数组支持

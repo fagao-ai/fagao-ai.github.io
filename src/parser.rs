@@ -79,11 +79,11 @@ impl EnvGenerator {
         // 替换点号为分隔符
         let formatted = key.replace('.', &self.config.separator);
 
-        // 添加前缀
+        // 添加前缀（不添加分隔符）
         let with_prefix = if self.config.prefix.is_empty() {
             formatted
         } else {
-            format!("{}{}{}", self.config.prefix, self.config.separator, formatted)
+            format!("{}{}", self.config.prefix, formatted)
         };
 
         // 转换为大写（如果需要）
@@ -108,7 +108,7 @@ mod tests {
     #[test]
     fn test_format_key_with_prefix() {
         let generator = EnvGenerator::with_prefix("APP".to_string());
-        assert_eq!(generator.format_key("database.host"), "APP_DATABASE_HOST");
+        assert_eq!(generator.format_key("database.host"), "APPDATABASE_HOST");
     }
 
     #[test]
@@ -125,6 +125,6 @@ mod tests {
         config.insert("database.port".to_string(), "5432".to_string());
 
         let env_lines = generator.generate(&config);
-        assert_eq!(env_lines, vec!["APP_DATABASE_HOST=localhost", "APP_DATABASE_PORT=5432"]);
+        assert_eq!(env_lines, vec!["APPDATABASE_HOST=localhost", "APPDATABASE_PORT=5432"]);
     }
 }
