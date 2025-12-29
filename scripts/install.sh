@@ -32,7 +32,7 @@ case "$ARCH" in
 esac
 
 # 获取最新版本
-LATEST_VERSION=$(curl -s https://api.github.com/repos/hezhaozhao/cte/releases/latest | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
+LATEST_VERSION=$(curl -s https://api.github.com/repos/fagao-ai/cte/releases/latest | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
 
 if [ -z "$LATEST_VERSION" ]; then
   echo "Failed to fetch latest version"
@@ -42,7 +42,7 @@ fi
 echo "Installing cte $LATEST_VERSION for $OS_TYPE-$ARCH_TYPE..."
 
 # 下载
-DOWNLOAD_URL="https://github.com/hezhaozhao/cte/releases/download/${LATEST_VERSION}/cte-${OS_TYPE}-${ARCH_TYPE}.tar.gz"
+DOWNLOAD_URL="https://github.com/fagao-ai/cte/releases/download/${LATEST_VERSION}/cte-${OS_TYPE}-${ARCH_TYPE}.tar.gz"
 echo "Downloading from $DOWNLOAD_URL..."
 
 TMP_DIR=$(mktemp -d)

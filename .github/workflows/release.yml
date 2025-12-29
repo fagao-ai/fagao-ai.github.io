@@ -99,7 +99,7 @@ jobs:
       - name: Checkout Homebrew Tap
         uses: actions/checkout@v4
         with:
-          repository: hezhaozhao/homebrew-tap
+          repository: fagao-ai/homebrew-tap
           token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
           path: homebrew-tap
 
@@ -109,15 +109,15 @@ jobs:
           echo "Updating Homebrew formula to version $VERSION"
 
           # 下载 Linux 二进制文件获取 SHA256
-          wget https://github.com/hezhaozhao/cte/releases/download/${VERSION}/cte-linux-amd64.tar.gz
+          wget https://github.com/fagao-ai/cte/releases/download/${VERSION}/cte-linux-amd64.tar.gz
           SHA256=$(shasum -a 256 cte-linux-amd64.tar.gz | awk '{print $1}')
 
           # 更新 Formula
           cat > homebrew-tap/Formula/cte.rb << 'EOF'
           class Cte < Formula
             desc "Config to ENV converter - Convert YAML/TOML/JSON configs to environment variables"
-            homepage "https://github.com/hezhaozhao/cte"
-            url "https://github.com/hezhaozhao/cte/archive/refs/tags/${VERSION}.tar.gz"
+            homepage "https://github.com/fagao-ai/cte"
+            url "https://github.com/fagao-ai/cte/archive/refs/tags/${VERSION}.tar.gz"
             sha256 "${SHA256}"
             license "MIT"
 

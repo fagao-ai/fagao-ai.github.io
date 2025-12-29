@@ -52,7 +52,7 @@
 
 ```bash
 # 如果还没有推送到 GitHub
-git remote add origin https://github.com/hezhaozhao/cte.git
+git remote add origin https://github.com/fagao-ai/cte.git
 git branch -M main
 git push -u origin main
 ```
@@ -61,7 +61,7 @@ git push -u origin main
 
 ```bash
 # 创建一个新的 GitHub 仓库：homebrew-tap
-git clone https://github.com/hezhaozhao/homebrew-tap.git
+git clone https://github.com/fagao-ai/homebrew-tap.git
 cd homebrew-tap
 mkdir -p Formula
 
@@ -77,7 +77,7 @@ git push origin main
 
 在 cte 仓库中设置 Secret：
 
-1. 访问：https://github.com/hezhaozhao/cte/settings/secrets/actions
+1. 访问：https://github.com/fagao-ai/cte/settings/secrets/actions
 2. 点击 "New repository secret"
 3. 添加：
    - Name: `HOMEBREW_TAP_TOKEN`
@@ -107,12 +107,12 @@ git push origin v0.1.0
 
 ```bash
 # 测试 Homebrew 安装
-brew tap hezhaozhao/tap
+brew tap fagao-ai/tap
 brew install cte
 cte --version
 
 # 测试安装脚本
-curl -fsSL https://raw.githubusercontent.com/hezhaozhao/cte/main/scripts/install.sh | sudo sh
+curl -fsSL https://raw.githubusercontent.com/fagao-ai/cte/main/scripts/install.sh | sudo sh
 cte --version
 ```
 
@@ -124,14 +124,14 @@ cte --version
 
 ```bash
 # 方式 1: Homebrew（推荐）
-brew tap hezhaozhao/tap
+brew tap fagao-ai/tap
 brew install cte
 
 # 方式 2: 安装脚本
-curl -fsSL https://raw.githubusercontent.com/hezhaozhao/cte/main/scripts/install.sh | sudo sh
+curl -fsSL https://raw.githubusercontent.com/fagao-ai/cte/main/scripts/install.sh | sudo sh
 
 # 方式 3: 手动下载
-curl -L https://github.com/hezhaozhao/cte/releases/latest/download/cte-darwin-amd64.tar.gz | tar xz
+curl -L https://github.com/fagao-ai/cte/releases/latest/download/cte-darwin-amd64.tar.gz | tar xz
 sudo mv cte /usr/local/bin/
 ```
 
@@ -139,13 +139,13 @@ sudo mv cte /usr/local/bin/
 
 ```bash
 # 方式 1: 安装脚本（推荐）
-curl -fsSL https://raw.githubusercontent.com/hezhaozhao/cte/main/scripts/install.sh | sudo sh
+curl -fsSL https://raw.githubusercontent.com/fagao-ai/cte/main/scripts/install.sh | sudo sh
 
 # 方式 2: 从源码编译
 cargo install cte
 
 # 方式 3: 手动下载
-wget https://github.com/hezhaozhao/cte/releases/latest/download/cte-linux-amd64.tar.gz
+wget https://github.com/fagao-ai/cte/releases/latest/download/cte-linux-amd64.tar.gz
 tar xzf cte-linux-amd64.tar.gz
 sudo mv cte /usr/local/bin/
 ```
@@ -154,8 +154,8 @@ sudo mv cte /usr/local/bin/
 
 ```bash
 # APT 仓库（需要额外设置，见 PUBLISHING.md）
-wget -qO- https://hezhaozhao.github.io/cte/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/cte.gpg
-echo "deb [arch=$(dpkg --print-architecture)] https://hezhaozhao.github.io/cte/apt stable main" | sudo tee /etc/apt/sources.list.d/cte.list
+wget -qO- https://fagao-ai.github.io/cte/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/cte.gpg
+echo "deb [arch=$(dpkg --print-architecture)] https://fagao-ai.github.io/cte/apt stable main" | sudo tee /etc/apt/sources.list.d/cte.list
 sudo apt update
 sudo apt install cte
 ```

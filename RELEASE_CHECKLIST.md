@@ -23,7 +23,7 @@
    ```
 
 3. **等待 GitHub Actions**
-   - 访问 https://github.com/hezhaozhao/cte/actions
+   - 访问 https://github.com/fagao-ai/cte/actions
    - 等待所有工作流完成（约 5-10 分钟）
 
 ## 验证阶段
@@ -31,7 +31,7 @@
 - [ ] 检查 GitHub Release 是否创建成功
 - [ ] 下载并测试二进制文件
 - [ ] 测试 Homebrew 安装：`brew upgrade cte`
-- [ ] 测试安装脚本：`curl -fsSL https://raw.githubusercontent.com/hezhaozhao/cte/main/scripts/install.sh | sudo sh`
+- [ ] 测试安装脚本：`curl -fsSL https://raw.githubusercontent.com/fagao-ai/cte/main/scripts/install.sh | sudo sh`
 - [ ] 更新文档（如需要）
 
 ## 发布后

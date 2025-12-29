@@ -5,7 +5,7 @@
 ### 1. 添加 Tap
 
 ```bash
-brew tap hezhaozhao/tap
+brew tap fagao-ai/tap
 ```
 
 ### 2. 安装
@@ -32,10 +32,10 @@ brew uninstall cte
 
 ```bash
 # 下载并添加仓库 GPG 密钥
-wget -qO- https://hezhaozhao.github.io/cte/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/cte.gpg
+wget -qO- https://fagao-ai.github.io/cte/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/cte.gpg
 
 # 添加仓库到 sources.list
-echo "deb [arch=$(dpkg --print-architecture)] https://hezhaozhao.github.io/cte/apt stable main" | sudo tee /etc/apt/sources.list.d/cte.list
+echo "deb [arch=$(dpkg --print-architecture)] https://fagao-ai.github.io/cte/apt stable main" | sudo tee /etc/apt/sources.list.d/cte.list
 
 # 更新包列表
 sudo apt update
@@ -65,11 +65,11 @@ sudo apt remove cte
 
 ```bash
 # Intel Mac
-curl -L https://github.com/hezhaozhao/cte/releases/latest/download/cte-darwin-amd64.tar.gz | tar xz
+curl -L https://github.com/fagao-ai/cte/releases/latest/download/cte-darwin-amd64.tar.gz | tar xz
 sudo mv cte /usr/local/bin/
 
 # Apple Silicon (M1/M2)
-curl -L https://github.com/hezhaozhao/cte/releases/latest/download/cte-darwin-arm64.tar.gz | tar xz
+curl -L https://github.com/fagao-ai/cte/releases/latest/download/cte-darwin-arm64.tar.gz | tar xz
 sudo mv cte /usr/local/bin/
 ```
 
@@ -77,11 +77,11 @@ sudo mv cte /usr/local/bin/
 
 ```bash
 # AMD64
-curl -L https://github.com/hezhaozhao/cte/releases/latest/download/cte-linux-amd64.tar.gz | tar xz
+curl -L https://github.com/fagao-ai/cte/releases/latest/download/cte-linux-amd64.tar.gz | tar xz
 sudo mv cte /usr/local/bin/
 
 # ARM64
-curl -L https://github.com/hezhaozhao/cte/releases/latest/download/cte-linux-arm64.tar.gz | tar xz
+curl -L https://github.com/fagao-ai/cte/releases/latest/download/cte-linux-arm64.tar.gz | tar xz
 sudo mv cte /usr/local/bin/
 ```
 
@@ -103,7 +103,7 @@ cargo install cte
 或从源码构建：
 
 ```bash
-git clone https://github.com/hezhaozhao/cte.git
+git clone https://github.com/fagao-ai/cte.git
 cd cte
 cargo build --release
 sudo cp target/release/cte /usr/local/bin/
@@ -112,7 +112,7 @@ sudo cp target/release/cte /usr/local/bin/
 ## 方式五：使用安装脚本（Linux/macOS）
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hezhaozhao/cte/main/scripts/install.sh | sudo sh
+curl -fsSL https://raw.githubusercontent.com/fagao-ai/cte/main/scripts/install.sh | sudo sh
 ```
 
 ## 开发者指南
@@ -167,10 +167,10 @@ brew reinstall cte
 
 ```bash
 # 检查网络连接
-ping hezhaozhao.github.io
+ping fagao-ai.github.io
 
 # 手动更新密钥
-wget -qO- https://hezhaozhao.github.io/cte/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/cte.gpg
+wget -qO- https://fagao-ai.github.io/cte/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/cte.gpg
 
 # 重新更新
 sudo apt update

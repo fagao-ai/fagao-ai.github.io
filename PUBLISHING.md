@@ -9,7 +9,7 @@
 ```bash
 # 在 GitHub 上创建一个名为 homebrew-tap 的仓库
 # 然后克隆它
-git clone https://github.com/hezhaozhao/homebrew-tap.git
+git clone https://github.com/fagao-ai/homebrew-tap.git
 cd homebrew-tap
 
 # 创建 Formula 目录
@@ -74,7 +74,7 @@ git push origin main
 
 4. **验证发布**
 
-   - 访问 https://github.com/hezhaozhao/cte/releases
+   - 访问 https://github.com/fagao-ai/cte/releases
    - 下载并测试二进制文件
    - 测试 Homebrew 安装：`brew upgrade cte`
 
@@ -103,7 +103,7 @@ tar czf cte-darwin-arm64.tar.gz cte
 
 #### 2. 创建 GitHub Release
 
-访问 https://github.com/hezhaozhao/cte/releases/new:
+访问 https://github.com/fagao-ai/cte/releases/new:
 - 选择 tag
 - 上传构建的二进制文件
 - 编写 Release Notes
@@ -114,8 +114,8 @@ tar czf cte-darwin-arm64.tar.gz cte
 ```ruby
 class Cte < Formula
   desc "Config to ENV converter"
-  homepage "https://github.com/hezhaozhao/cte"
-  url "https://github.com/hezhaozhao/cte/archive/refs/tags/v0.2.0.tar.gz"
+  homepage "https://github.com/fagao-ai/cte"
+  url "https://github.com/fagao-ai/cte/archive/refs/tags/v0.2.0.tar.gz"
   sha256 "<计算新的 SHA256>"
   # ...
 end
@@ -123,7 +123,7 @@ end
 
 计算 SHA256:
 ```bash
-curl -L https://github.com/hezhaozhao/cte/archive/refs/tags/v0.2.0.tar.gz | shasum -a 256
+curl -L https://github.com/fagao-ai/cte/archive/refs/tags/v0.2.0.tar.gz | shasum -a 256
 ```
 
 #### 4. 构建 Debian 包

@@ -18,15 +18,15 @@
 
 **使用 Homebrew:**
 ```bash
-brew tap hezhaozhao/tap
+brew tap fagao-ai/tap
 brew install cte
 ```
 
 **使用 APT (Debian/Ubuntu):**
 ```bash
 # 添加仓库
-wget -qO- https://hezhaozhao.github.io/cte/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/cte.gpg
-echo "deb [arch=$(dpkg --print-architecture)] https://hezhaozhao.github.io/cte/apt stable main" | sudo tee /etc/apt/sources.list.d/cte.list
+wget -qO- https://fagao-ai.github.io/cte/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/cte.gpg
+echo "deb [arch=$(dpkg --print-architecture)] https://fagao-ai.github.io/cte/apt stable main" | sudo tee /etc/apt/sources.list.d/cte.list
 
 # 安装
 sudo apt update
@@ -35,7 +35,7 @@ sudo apt install cte
 
 **使用安装脚本:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hezhaozhao/cte/main/scripts/install.sh | sudo sh
+curl -fsSL https://raw.githubusercontent.com/fagao-ai/cte/main/scripts/install.sh | sudo sh
 ```
 
 ### 从源码构建
@@ -45,7 +45,7 @@ curl -fsSL https://raw.githubusercontent.com/hezhaozhao/cte/main/scripts/install
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # 克隆并构建
-git clone https://github.com/hezhaozhao/cte.git
+git clone https://github.com/fagao-ai/cte.git
 cd cte
 cargo build --release
 sudo cp target/release/cte /usr/local/bin/
@@ -53,7 +53,7 @@ sudo cp target/release/cte /usr/local/bin/
 
 ### 预编译二进制
 
-从 [GitHub Releases](https://github.com/hezhaozhao/cte/releases) 下载适合你系统的二进制文件。
+从 [GitHub Releases](https://github.com/fagao-ai/cte/releases) 下载适合你系统的二进制文件。
 
 更多安装方式请查看 [完整安装指南](INSTALL.md)。
 
